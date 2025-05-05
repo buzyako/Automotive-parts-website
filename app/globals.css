@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #2e2e2e;
+  --secondary: #c8102e;
+  --accent: #c0c0c0;
+  --highlight: #007bff;
+  --vehicle-selector-height: 56px;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-[#2E2E2E];
+  }
+
+  /* Fix for dropdown backgrounds */
+  [data-radix-popper-content-wrapper] {
+    @apply !z-50;
+  }
+
+  /* Improve touch targets on mobile */
+  @media (max-width: 768px) {
+    button,
+    a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    input,
+    select {
+      min-height: 44px;
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#C8102E] hover:bg-[#A50D26] text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-[#2E2E2E] hover:bg-[#1A1A1A] text-white;
+  }
+
+  .btn-outline {
+    @apply border border-[#C0C0C0] text-[#2E2E2E] hover:bg-[#007BFF] hover:text-white hover:border-[#007BFF];
+  }
+
+  .accent-border {
+    @apply border-[#C0C0C0];
+  }
+
+  .highlight {
+    @apply text-[#007BFF];
+  }
+
+  /* Mobile-friendly card grid */
+  .product-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+  }
+
+  /* Improved spacing for mobile */
+  .mobile-container {
+    @apply px-4 py-3 md:px-6 md:py-4;
+  }
+}
+
+/* Custom styles for select dropdowns */
+.radix-select-content {
+  background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.radix-select-item {
+  background-color: white !important;
+}
+
+.radix-select-item:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.radix-select-viewport {
+  background-color: white !important;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.2s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
