@@ -1,16 +1,5 @@
 import Link from "next/link"
-import { Suspense } from "react"
 import { Button } from "@/components/ui/button"
-
-// SearchParamsWrapper component that uses useSearchParams
-function SearchParamsWrapper() {
-  "use client"
-
-  // This is where useSearchParams would be used
-  // Since we're not actually using the search params for functionality,
-  // we can just render the content without the hook
-  return null
-}
 
 export default function NotFound() {
   return (
@@ -19,11 +8,6 @@ export default function NotFound() {
       <p className="text-lg text-gray-600 mb-8 text-center max-w-md">
         Sorry, we couldn't find the page you're looking for. It might have been moved or deleted.
       </p>
-
-      {/* Suspense boundary for any component that might use useSearchParams */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <SearchParamsWrapper />
-      </Suspense>
 
       <div className="flex flex-col sm:flex-row gap-4">
         <Button asChild className="bg-red-600 hover:bg-red-700">
