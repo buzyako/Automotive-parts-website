@@ -9,36 +9,30 @@ export default function ShippingPage() {
     {
       name: "Standard Shipping",
       time: "3-5 business days",
-      price: "₱150",
-      description: "Available nationwide for orders under ₱5,000",
+      price: "₱250",
+      description: "Available in Metro Manila and Select Urban Areas",
     },
     {
       name: "Express Shipping",
-      time: "1-2 business days",
-      price: "₱250",
-      description: "Available in Metro Manila and select urban areas",
-    },
-    {
-      name: "Same-Day Delivery",
-      time: "Same day (order before 11 AM)",
+      time: "2-3 business days",
       price: "₱350",
-      description: "Available in Metro Manila only",
+      description: "Available in Metro Manila Only",
     },
     {
       name: "Free Shipping",
       time: "3-5 business days",
       price: "FREE",
-      description: "For orders above ₱5,000",
+      description: "For orders above ₱5,000 in Metro Manila and Select Urban Areas",
     },
   ]
 
   // Shipping partners
   const shippingPartners = [
-    { name: "J&T Express", logo: "/placeholder.svg?height=60&width=120&query=J%26T+Express+logo" },
-    { name: "LBC", logo: "/placeholder.svg?height=60&width=120&query=LBC+logo" },
-    { name: "Ninja Van", logo: "/placeholder.svg?height=60&width=120&query=Ninja+Van+logo" },
-    { name: "Grab Express", logo: "/placeholder.svg?height=60&width=120&query=Grab+Express+logo" },
-    { name: "Lalamove", logo: "/placeholder.svg?height=60&width=120&query=Lalamove+logo" },
+    { name: "J&T Express", logo: "/placeholder.svg?key=94l92" },
+    { name: "LBC", logo: "/placeholder.svg?key=7r7fe" },
+    { name: "Ninja Van", logo: "/placeholder.svg?key=5exwq" },
+    { name: "Grab Express", logo: "/placeholder.svg?key=ojz0w" },
+    { name: "Lalamove", logo: "/placeholder.svg?key=b9hhd" },
   ]
 
   return (
@@ -100,25 +94,26 @@ export default function ShippingPage() {
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/2">
-              <h2 className="text-2xl font-bold mb-4">Nationwide Delivery</h2>
+              <h2 className="text-2xl font-bold mb-4">Limited Delivery Areas</h2>
               <p className="text-gray-700 mb-4">
-                PyeSakto.ph delivers auto parts to all major cities and provinces across the Philippines. Delivery times
-                may vary based on your location and the shipping method selected.
+                PyeSakto.ph delivers auto parts to Metro Manila, nearby provinces, and select urban areas only. We
+                currently do not offer nationwide shipping. Delivery times may vary based on your location and the
+                shipping method selected.
               </p>
 
               <div className="space-y-4 mb-6">
                 <div className="flex items-start gap-2">
                   <div className="w-6 h-6 rounded-full bg-green-500 flex-shrink-0 mt-1"></div>
                   <div>
-                    <h3 className="font-semibold">Metro Manila & Major Cities</h3>
-                    <p className="text-sm text-gray-600">1-3 business days</p>
+                    <h3 className="font-semibold">Metro Manila</h3>
+                    <p className="text-sm text-gray-600">2-3 business days</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2">
                   <div className="w-6 h-6 rounded-full bg-blue-500 flex-shrink-0 mt-1"></div>
                   <div>
-                    <h3 className="font-semibold">Provincial Areas</h3>
+                    <h3 className="font-semibold">Nearby Provinces (Cavite, Laguna, Rizal, Bulacan)</h3>
                     <p className="text-sm text-gray-600">3-5 business days</p>
                   </div>
                 </div>
@@ -126,8 +121,8 @@ export default function ShippingPage() {
                 <div className="flex items-start gap-2">
                   <div className="w-6 h-6 rounded-full bg-yellow-500 flex-shrink-0 mt-1"></div>
                   <div>
-                    <h3 className="font-semibold">Remote Areas</h3>
-                    <p className="text-sm text-gray-600">5-7 business days</p>
+                    <h3 className="font-semibold">Select Urban Areas</h3>
+                    <p className="text-sm text-gray-600">3-5 business days</p>
                   </div>
                 </div>
               </div>
@@ -137,8 +132,8 @@ export default function ShippingPage() {
 
             <div className="md:w-1/2 relative h-64 md:h-96 w-full rounded-lg overflow-hidden border">
               <Image
-                src="/placeholder.svg?height=600&width=800&query=philippines+map+delivery"
-                alt="Philippines Delivery Map"
+                src="/placeholder.svg?height=600&width=800&query=metro+manila+and+nearby+provinces+map"
+                alt="Metro Manila and Nearby Provinces Delivery Map"
                 fill
                 className="object-cover"
               />
@@ -240,13 +235,14 @@ export default function ShippingPage() {
             </div>
 
             <div className="bg-white border rounded-lg p-6">
-              <h3 className="font-bold text-lg mb-3">International Shipping</h3>
+              <h3 className="font-bold text-lg mb-3">Shipping Coverage</h3>
               <p className="text-gray-700 mb-4">
-                Currently, PyeSakto.ph only ships within the Philippines. We're working on expanding our shipping
-                services to other countries in Southeast Asia in the near future.
+                Currently, PyeSakto.ph only ships to Metro Manila, nearby provinces (Cavite, Laguna, Rizal, Bulacan),
+                and select urban areas in the Philippines. We do not offer nationwide shipping at this time.
               </p>
               <p className="text-gray-700">
-                For international customers, please contact our customer service team for special arrangements.
+                For customers outside our delivery areas, please contact our customer service team for special
+                arrangements or alternative options.
               </p>
             </div>
           </div>
@@ -270,8 +266,8 @@ export default function ShippingPage() {
             <div className="bg-white p-6 rounded-lg border">
               <h3 className="font-semibold mb-2">Do you ship to all provinces in the Philippines?</h3>
               <p className="text-gray-600">
-                Yes, we ship to all provinces in the Philippines. Delivery times and shipping fees may vary depending on
-                your location.
+                No, we currently only ship to Metro Manila, nearby provinces (Cavite, Laguna, Rizal, Bulacan), and
+                select urban areas. We're working on expanding our delivery network in the future.
               </p>
             </div>
 

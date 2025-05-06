@@ -22,7 +22,7 @@ export default function SupplierRegister() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label htmlFor="businessName" className="block text-sm font-medium text-gray-700">
-                      Business Name
+                      Business Name <span className="text-red-500">*</span>
                     </label>
                     <Input id="businessName" placeholder="Your business name" required />
                   </div>
@@ -60,21 +60,21 @@ export default function SupplierRegister() {
 
                   <div className="space-y-2">
                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                      Business Address
+                      Business Address <span className="text-red-500">*</span>
                     </label>
                     <Input id="address" placeholder="Street address" required />
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                      City
+                      City <span className="text-red-500">*</span>
                     </label>
                     <Input id="city" placeholder="City" required />
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="province" className="block text-sm font-medium text-gray-700">
-                      Province
+                      Province <span className="text-red-500">*</span>
                     </label>
                     <Input id="province" placeholder="Province" required />
                   </div>
@@ -115,7 +115,7 @@ export default function SupplierRegister() {
 
                   <div className="space-y-2">
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                      Phone Number
+                      Phone Number <span className="text-red-500">*</span>
                     </label>
                     <Input id="phone" type="tel" placeholder="+63 XXX XXX XXXX" required />
                   </div>

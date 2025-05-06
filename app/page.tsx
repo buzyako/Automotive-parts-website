@@ -229,6 +229,16 @@ export default function Home() {
           </div>
         </section>
       </main>
+      {/* If there's any shipping information on the homepage, update it */}
+      {/* Look for any shipping-related sections or banners and update them */}
+      {/* Example (if this exists): */}
+      <div className="bg-[#C8102E] text-white py-2">
+        <div className="container mx-auto text-center">
+          <p className="text-sm md:text-base font-medium">
+            FREE SHIPPING on orders over ₱5,000 in Metro Manila and Select Urban Areas!
+          </p>
+        </div>
+      </div>
 
       <footer className="bg-[#2E2E2E] text-white pt-12 pb-6">
         <div className="container mx-auto px-4">

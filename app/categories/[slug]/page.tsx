@@ -1,60 +1,82 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useVehicle } from "@/lib/vehicle-context"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getProductsByVehicle } from "@/lib/product-data"
+import { getProductsByMainCategory, getProductsByCategory } from "@/lib/product-data"
 
-export default function VehicleResultsPage() {
-  const { vehicle, isVehicleSelected } = useVehicle()
-  const router = useRouter()
+export default function CategoryPage({ params }: { params: { slug: string } }) {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [categoryName, setCategoryName] = useState("")
 
   useEffect(() => {
-    if (!isVehicleSelected) {
-      router.push("/")
-      return
+    // First try to get products by main category
+    let categoryProducts = getProductsByMainCategory(
+      params.slug
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
+    )
+
+    // If no products found, try by category
+    if (categoryProducts.length === 0) {
+      categoryProducts = getProductsByCategory(
+        params.slug
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+      )
     }
 
-    // Get products that match the selected vehicle
-    const matchingProducts = getProductsByVehicle(vehicle.year, vehicle.make, vehicle.model, vehicle.engine)
+    setProducts(categoryProducts)
 
-    setProducts(matchingProducts)
+    // Set category name
+    if (categoryProducts.length > 0) {
+      setCategoryName(categoryProducts[0].mainCategory || categoryProducts[0].category)
+    } else {
+      setCategoryName(
+        params.slug
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+      )
+    }
+
     setLoading(false)
-  }, [vehicle, isVehicleSelected, router])
+  }, [params.slug])
 
-  // Group products by category
-  const productsByCategory: Record<string, any[]> = {}
+  // Group products by subcategory
+  const productsBySubCategory: Record<string, any[]> = {}
   products.forEach((product) => {
-    if (!productsByCategory[product.mainCategory]) {
-      productsByCategory[product.mainCategory] = []
+    if (!productsBySubCategory[product.subCategory]) {
+      productsBySubCategory[product.subCategory] = []
     }
-    productsByCategory[product.mainCategory].push(product)
+    productsBySubCategory[product.subCategory].push(product)
   })
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-        <h1 className="text-2xl font-bold mb-2">Parts for Your Vehicle</h1>
-        <div className="flex items-center text-lg font-medium text-gray-700 mb-4">
-          <span>{vehicle.year}</span>
-          <ChevronRight className="h-4 w-4 mx-1 text-gray-400" />
-          <span>{vehicle.make}</span>
-          <ChevronRight className="h-4 w-4 mx-1 text-gray-400" />
-          <span>{vehicle.model}</span>
-          <ChevronRight className="h-4 w-4 mx-1 text-gray-400" />
-          <span>{vehicle.engine}</span>
+        <h1 className="text-2xl font-bold mb-2">{categoryName}</h1>
+        <div className="flex items-center text-sm text-gray-500 mb-4">
+          <Link href="/" className="hover:text-[#007BFF]">
+            Home
+          </Link>
+          <ChevronRight className="h-3 w-3 mx-1" />
+          <Link href="/categories" className="hover:text-[#007BFF]">
+            Categories
+          </Link>
+          <ChevronRight className="h-3 w-3 mx-1" />
+          <span className="text-gray-700">{categoryName}</span>
         </div>
         <p className="text-gray-600">
-          We've found {products.length} parts and accessories that fit your vehicle. Browse by category below or use the
-          search and filter options to narrow down your results.
+          Browse our selection of {categoryName.toLowerCase()} for your vehicle. We offer a wide range of high-quality
+          parts from top brands to keep your vehicle running at its best.
         </p>
       </div>
 
@@ -66,36 +88,35 @@ export default function VehicleResultsPage() {
         </div>
       ) : products.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-          <h2 className="text-xl font-bold mb-2">No Parts Found</h2>
+          <h2 className="text-xl font-bold mb-2">No Products Found</h2>
           <p className="text-gray-600 mb-6">
-            We couldn't find any parts for your selected vehicle. Please try a different vehicle or browse our
-            categories.
+            We couldn't find any products in this category. Please try a different category or browse all products.
           </p>
           <div className="flex justify-center gap-4">
             <Button asChild>
-              <Link href="/">Change Vehicle</Link>
+              <Link href="/categories">Browse Categories</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/categories">Browse Categories</Link>
+              <Link href="/products">All Products</Link>
             </Button>
           </div>
         </div>
       ) : (
         <>
-          {/* Categories with products */}
-          {Object.entries(productsByCategory).map(([category, categoryProducts]) => (
-            <div key={category} className="mb-12">
+          {/* Subcategories with products */}
+          {Object.entries(productsBySubCategory).map(([subCategory, subCategoryProducts]) => (
+            <div key={subCategory} className="mb-12">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">{category}</h2>
+                <h2 className="text-xl font-bold">{subCategory}</h2>
                 <Link
-                  href={`/categories/${categoryProducts[0].category.toLowerCase()}`}
+                  href={`/categories/${params.slug}/${subCategory.toLowerCase().replace(/\s+/g, "-")}`}
                   className="text-[#007BFF] text-sm hover:underline flex items-center"
                 >
                   View all <ChevronRight className="h-4 w-4 ml-1" />
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {categoryProducts.slice(0, 4).map((product) => (
+                {subCategoryProducts.slice(0, 4).map((product) => (
                   <Link href={`/products/${product.id}`} key={product.id}>
                     <Card className="h-full hover:shadow-md transition-shadow duration-200">
                       <div className="relative aspect-square">
@@ -142,11 +163,11 @@ export default function VehicleResultsPage() {
                   </Link>
                 ))}
               </div>
-              {categoryProducts.length > 4 && (
+              {subCategoryProducts.length > 4 && (
                 <div className="mt-4 text-center">
                   <Button variant="outline" asChild>
-                    <Link href={`/categories/${categoryProducts[0].category.toLowerCase()}`}>
-                      View All {category} Parts ({categoryProducts.length})
+                    <Link href={`/categories/${params.slug}/${subCategory.toLowerCase().replace(/\s+/g, "-")}`}>
+                      View All {subCategory} ({subCategoryProducts.length})
                     </Link>
                   </Button>
                 </div>
@@ -154,33 +175,19 @@ export default function VehicleResultsPage() {
             </div>
           ))}
 
-          {/* Recommended Maintenance Parts */}
+          {/* Popular Brands */}
           <div className="bg-white rounded-lg shadow-sm p-6 mt-8">
-            <h2 className="text-xl font-bold mb-4">Recommended Maintenance Parts</h2>
-            <p className="text-gray-600 mb-6">
-              Based on your vehicle's age and typical maintenance schedule, we recommend the following parts:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {products
-                .filter((product) =>
-                  ["Oil Filters", "Air Filters", "Spark Plugs", "Wiper Blades"].includes(product.subCategory),
-                )
-                .slice(0, 4)
-                .map((product) => (
-                  <Link href={`/products/${product.id}`} key={product.id} className="block">
-                    <div className="border rounded-lg p-4 hover:border-[#007BFF] hover:shadow-sm transition-all">
-                      <div className="flex items-center mb-2">
-                        <div className="w-12 h-12 relative mr-3">
-                          <Image
-                            src={product.images[0] || "/placeholder.svg"}
-                            alt={product.name}
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
-                        <h3 className="font-medium text-gray-900 line-clamp-2">{product.name}</h3>
-                      </div>
-                      <p className="text-[#C8102E] font-bold">₱{product.price.toLocaleString()}</p>
+            <h2 className="text-xl font-bold mb-4">Popular Brands in {categoryName}</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {Array.from(new Set(products.map((product) => product.brand)))
+                .slice(0, 6)
+                .map((brand, index) => (
+                  <Link href={`/products?brand=${brand}`} key={index} className="block">
+                    <div className="border rounded-lg p-4 hover:border-[#007BFF] hover:shadow-sm transition-all text-center">
+                      <h3 className="font-medium text-gray-900">{brand}</h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {products.filter((p) => p.brand === brand).length} products
+                      </p>
                     </div>
                   </Link>
                 ))}
