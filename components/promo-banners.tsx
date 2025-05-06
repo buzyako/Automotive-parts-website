@@ -6,7 +6,12 @@ export default function PromoBanners() {
     <section className="py-8 px-4">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold mb-6">Shop By Category</h2>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="bg-[#C8102E] text-white py-2 px-4 rounded-md">
+          <p className="text-center font-medium">
+            FREE SHIPPING on orders over ₱5,000 in Metro Manila and Select Urban Areas!
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4 mt-4">
           {/* Brakes Banner */}
           <div className="bg-[#C8102E] text-white rounded-lg overflow-hidden flex">
             <div className="p-6 flex-1">

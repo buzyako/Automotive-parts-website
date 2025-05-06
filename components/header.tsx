@@ -31,6 +31,7 @@ export default function Header() {
         dropdown &&
         accountButton &&
         !dropdown.contains(event.target as Node) &&
+        !accountButton.contains(event.target as Node) &&
         !accountButton.contains(event.target as Node)
       ) {
         setIsAccountDropdownOpen(false)
@@ -181,11 +182,11 @@ export default function Header() {
                   >
                     <div className="py-2">
                       <Link
-                        href="/account"
+                        href="/customer/login"
                         className="block px-4 py-2 text-sm hover:bg-gray-100"
                         onClick={() => setIsAccountDropdownOpen(false)}
                       >
-                        Customer Login
+                        Login / Register
                       </Link>
                       <Link
                         href="/suppliers/login"

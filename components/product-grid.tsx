@@ -110,7 +110,7 @@ export default function ProductGrid() {
                 <Card className="h-full hover:shadow-md transition-shadow duration-200">
                   <div className="relative aspect-square">
                     <Image
-                      src={product.image || "/placeholder.svg"}
+                      src={product.images[0] || "/placeholder.svg"}
                       alt={product.name}
                       fill
                       className="object-cover rounded-t-lg"

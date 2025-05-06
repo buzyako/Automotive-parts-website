@@ -1,22 +1,25 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ShoppingCart, Minus, Plus, Loader2 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import Image from "next/image"
 
-interface AddToCartButtonProps {
-  productId: string
-  className?: string
+interface Product {
+  id: string
+  name: string
+  price: number
+  stock: number
+  images: string[]
 }
 
-export default function AddToCartButton({ productId, className }: AddToCartButtonProps) {
+interface AddToCartButtonProps {
+  product: Product
+}
+
+export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -25,81 +28,67 @@ export default function AddToCartButton({ productId, className }: AddToCartButto
   }
 
   const increaseQuantity = () => {
-    setQuantity(quantity + 1)
-  }
-
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseInt(e.target.value)
-    if (!isNaN(value) && value > 0) {
-      setQuantity(value)
-    } else if (e.target.value === "") {
-      setQuantity(1)
+    if (quantity < product.stock) {
+      setQuantity(quantity + 1)
     }
   }
 
-  const handleAddToCart = async () => {
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    toast({
-      title: "Added to cart",
-      description: `${quantity} item(s) added to your cart`,
-    })
-
-    setIsLoading(false)
-  }
-
-  const handleBuyNow = async () => {
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    // In a real app, this would navigate to checkout
-    toast({
-      title: "Proceeding to checkout",
-      description: `${quantity} item(s) ready for checkout`,
-    })
-
-    setIsLoading(false)
+  const handleAddToCart = () => {
+    // In a real app, this would add the product to the cart
+    // For now, we'll just show a dialog
+    setIsDialogOpen(true)
   }
 
   return (
-    <div className={`space-y-4 ${className}`}>
-      <div className="flex items-center">
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={decreaseQuantity}
-          disabled={quantity <= 1}
-          className="rounded-r-none"
-        >
-          <Minus className="h-4 w-4" />
-        </Button>
-        <Input
-          type="number"
-          min="1"
-          value={quantity}
-          onChange={handleQuantityChange}
-          className="w-16 text-center rounded-none border-x-0"
-        />
-        <Button type="button" variant="outline" size="icon" onClick={increaseQuantity} className="rounded-l-none">
-          <Plus className="h-4 w-4" />
+    <div>
+      <div className="flex items-center gap-2">
+        <div className="flex items-center border border-gray-300 rounded-md">
+          <button
+            onClick={decreaseQuantity}
+            className="px-2 py-1 text-gray-600 hover:text-red-600 disabled:opacity-50"
+            disabled={quantity <= 1}
+          >
+            -
+          </button>
+          <span className="px-2 py-1 text-center w-10 text-sm">{quantity}</span>
+          <button
+            onClick={increaseQuantity}
+            className="px-2 py-1 text-gray-600 hover:text-red-600 disabled:opacity-50"
+            disabled={quantity >= product.stock}
+          >
+            +
+          </button>
+        </div>
+        <Button onClick={handleAddToCart} className="bg-red-600 hover:bg-red-700 text-white px-6 py-1 h-auto text-sm">
+          Add to Cart
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button onClick={handleAddToCart} disabled={isLoading} variant="outline" className="w-full">
-          {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShoppingCart className="h-4 w-4 mr-2" />}
-          Add to Cart
-        </Button>
-        <Button onClick={handleBuyNow} disabled={isLoading} className="w-full">
-          {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Buy Now"}
-        </Button>
-      </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Added to Cart</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-3 mt-2">
+            <div className="relative h-14 w-14 overflow-hidden rounded-md">
+              <Image src={product.images[0] || "/placeholder.svg"} alt={product.name} fill className="object-cover" />
+            </div>
+            <div>
+              <p className="font-medium text-sm">{product.name}</p>
+              <p className="text-xs text-gray-500">Quantity: {quantity}</p>
+              <p className="text-sm font-medium">₱{(product.price * quantity).toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="h-8 text-xs">
+              Continue Shopping
+            </Button>
+            <Button asChild className="bg-red-600 hover:bg-red-700 h-8 text-xs">
+              <a href="/cart">View Cart</a>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
